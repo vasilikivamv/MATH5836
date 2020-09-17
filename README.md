@@ -1,2 +1,2 @@
-# MATH5836
-Exercises in MATH5836
+# MATH5836- Data Mining
+Solutions to problems
