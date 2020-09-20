@@ -117,4 +117,84 @@ hist(test.data$Sepal.Width,main = "Histogram of Sepal Width,test",col = "green")
 hist(test.data$Petal.Length,main = "Histogram of Petal Lenght,test",col = "green")
 hist(test.data$Petal.Width,main = "Histogram of Petal Width,test",col = "green")
 
+#7. part of train set with only one feature
+one.featuretrain <- subset(train.data, train.data$Species == 1)
 
+# part of test data with one feature
+one.featuretest <- subset(test.data, test.data$Species == 1)
+
+
+#8. binary problem
+
+# remove one class
+binary.iris <- iris[!(iris$Species == 3),] 
+
+
+#Spliting the data set to training and testing sets
+
+set.seed(123)
+training.samples <- sample(1:nrow(binary.iris), nrow(binary.iris)*0.6, replace = F)
+
+binary_iristrain  <- binary.iris[training.samples, ]
+binary_iristest <- binary.iris[-training.samples, ]
+
+#mean and sd of the test data set
+
+#initialization of matrixes
+mean_binary_iristrain <- matrix(NA, nrow = 1, ncol=4)
+mean_binary_iristest <- matrix(NA, nrow = 1, ncol=4 )
+sd_binary_iristrain <- matrix(NA, nrow = 1, ncol=4)
+sd_binary_iristest <- matrix(NA, nrow = 1, ncol=4)
+
+for (i in 1:4) {
+  
+  mean_binary_iristrain[,i] <- mean(binary_iristrain[,i])
+  mean_binary_iristest[,i] <- mean(binary_iristest[,i])
+  sd_binary_iristrain[,i] <- sd(binary_iristrain[,i])
+  sd_binary_iristest[,i] <- sd(binary_iristest[,i])
+  
+}
+
+
+#frequency table of the classes in the train data set
+table(binary_iristrain$Species)
+
+# Species (setosa=1, versicolor=2)
+# 1      2   
+# 30    30
+
+#frequency table of the classes in the test data set
+table(binary_iristest$Species)
+
+# Species (setosa=1, versicolor=2)
+# 1     2      
+# 20    20    
+
+
+#histograms of each feature
+par(mfrow=c(4,2))
+
+hist(binary_iristrain$Sepal.Length,main = "Histogram of Sepal Lenght,train",col = "blue")
+hist(binary_iristrain$Sepal.Width,main = "Histogram of Sepal Width,train",col = "blue")
+hist(binary_iristrain$Petal.Length,main = "Histogram of Petal Lenght,train",col = "blue")
+hist(binary_iristrain$Petal.Width,main = "Histogram of Petal Width,train",col = "blue")
+
+
+hist(binary_iristest$Sepal.Length,main = "Histogram of Sepal Lenght,test",col = "green")
+hist(binary_iristest$Sepal.Width,main = "Histogram of Sepal Width,test",col = "green")
+hist(binary_iristest$Petal.Length,main = "Histogram of Petal Lenght,test",col = "green")
+hist(binary_iristest$Petal.Width,main = "Histogram of Petal Width,test",col = "green")
+
+
+#9. normalized inputs between [0,1]
+
+#normalization function
+norm.function <- function(feature) {
+  (feature - min(feature)) / (max(feature) - min(feature))
+}
+
+iris.normal <- as.data.frame (lapply(iris[1:4], norm.function ))
+
+# add the Species feature again
+iris.normal$Species <- iris$Species
+head(iris.normal)
